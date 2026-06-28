@@ -3,12 +3,11 @@
   "private": true,
   "packageManager": "pnpm@9.1.0",
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "test": "turbo run test"
-  },
-  "devDependencies": {
-    "turbo": "^2.0.6"
+    "build:api": "pnpm --filter @axiom/api build",
+    "build:web": "pnpm --filter @axiom/web build",
+    "start:api": "pnpm --filter @axiom/api start",
+    "start:web": "pnpm --filter @axiom/web start",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test"
   }
 }
