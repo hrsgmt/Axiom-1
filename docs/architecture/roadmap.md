@@ -48,5 +48,13 @@ itemized here as the prior phase nears completion.
   render.yaml, ci.yml, and both Dockerfiles, and committing a real
   `pnpm-lock.yaml` generated from the Codespace (the one environment we've
   confirmed runs `pnpm install` successfully). Going forward, any new
-  dependency added to a package.json must have the lockfile regenerated
-  and committed in the same change, or this class of failure recurs.
+- **2026-06-28**: **Switched apps/web from Next.js to Vite + React.**
+  Confirmed Next.js's SWC compiler has no Android arm64 build (404 from npm
+  registry, not a config issue) — cannot run in Termux under any setup.
+  Vite has no native-binary dependency and runs on Termux. Tradeoff: lost
+  SSR, pages now fetch client-side via useEffect instead of server-side
+  fetch. Revisit if/when SEO on public pages becomes a real requirement —
+  reversible later, isolated to the frontend tooling layer only. Env var
+  convention changed from `NEXT_PUBLIC_*` to `VITE_*`; note Vite bakes
+  these in at build time, not runtime — changing `VITE_API_URL` later
+  requires a rebuild, not just a restart.

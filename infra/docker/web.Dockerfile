@@ -4,7 +4,7 @@ WORKDIR /repo
 
 RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
 
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY packages/types ./packages/types
 COPY apps/web ./apps/web
 

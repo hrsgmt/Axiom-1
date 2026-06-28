@@ -28,5 +28,5 @@ services:
     startCommand: pnpm start:web
     plan: free
     envVars:
-      - key: NEXT_PUBLIC_API_URL
+      - key: VITE_API_URL
         sync: false
