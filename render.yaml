@@ -5,8 +5,8 @@ services:
     repo: https://github.com/hrsgmt/Axiom-1
     branch: main
     rootDir: .
-    buildCommand: corepack enable && corepack prepare pnpm@9.1.0 --activate && pnpm install && pnpm build:api
-    startCommand: pnpm start:api
+    buildCommand: corepack enable && corepack prepare pnpm@9.1.0 --activate && pnpm install && pnpm --filter @axiom/api prisma:generate && pnpm build:api
+    startCommand: pnpm --filter @axiom/api prisma:deploy && pnpm start:api
     plan: free
     envVars:
       - key: PORT

@@ -51,6 +51,25 @@ git push
 Render is connected to this repo's `main` branch and redeploys automatically
 on every push (see render.yaml).
 
+## Local testing (on Termux, current actual workflow)
+
+```bash
+pnpm install   # run from repo root, installs all workspaces
+
+# Terminal 1
+cd services/api
+cp .env.example .env   # fill in real DATABASE_URL and JWT secrets
+pnpm prisma:generate
+pnpm prisma:migrate    # creates users + refresh_tokens tables
+pnpm dev               # listens on :4000
+
+# Terminal 2
+cd apps/web
+pnpm dev               # listens on :3000
+```
+
+Visit `http://localhost:3000` in the browser.
+
 ## Testing
 
 GitHub Actions runs lint/build/test on every push — check the Actions tab

@@ -4,12 +4,19 @@ Status key: ✅ done · 🚧 in progress · ⬜ not started
 
 ## Phase 0 — Foundations
 - ✅ **M1** — Repo & CI/CD skeleton (pnpm monorepo, NestJS API with
-  `/health`, Next.js web app, GitHub Actions CI)
-- ✅ **M1.5** — Render deploy pipeline (render.yaml Blueprint, auto-deploy
-  on push to main, Render Postgres provisioned)
-- 🚧 **M2** — Auth (email + OAuth, JWT + refresh rotation, `users` table,
-  Prisma schema)
-- ⬜ **M3** — User profiles (read/update, avatar upload stub)
+  `/health`, Vite + React web app, GitHub Actions CI). **Verified working
+  end-to-end on Termux/Android arm64** — the developer's actual target
+  device — via `pnpm dev` in both services and a successful fetch from
+  localhost:3000 to localhost:4000.
+- 🚧 **M1.5** — Render deploy pipeline (render.yaml Blueprint exists;
+  pending: push regenerated lockfile for Vite deps, then confirm live
+  deploy succeeds)
+- 🚧 **M2** — Auth (email/password signup+login, JWT access tokens,
+  rotating single-use refresh tokens, bcrypt hashing, Prisma + Postgres).
+  Built, pending local test on Termux. OAuth deferred to M2b.
+- ⬜ **M2b** — Google OAuth (oauth_accounts table, callback flow)
+- ⬜ **M3** — User profiles (read/update, avatar upload stub, username
+  chosen here)
 - ⬜ **M4** — Design system & navigation shell (Tailwind tokens, mode
   switcher nav, shared component library)
 - ⬜ **M5–M10** — TBD, refined as M2–M4 land
@@ -58,3 +65,22 @@ itemized here as the prior phase nears completion.
   convention changed from `NEXT_PUBLIC_*` to `VITE_*`; note Vite bakes
   these in at build time, not runtime — changing `VITE_API_URL` later
   requires a rebuild, not just a restart.
+- **2026-06-28**: **M2 auth scope decisions.** Email-only at signup;
+  username/display name deferred to M3 (profiles) since it belongs with
+  the rest of profile data rather than splitting identity setup across two
+  milestones. Refresh tokens are random bytes (not JWTs), stored only as
+  SHA-256 hashes, single-use with rotation — replay of an already-redeemed
+  token is detectable and rejected. Access tokens are short-lived JWTs
+  (15 min) signed with JWT_ACCESS_SECRET.
+- **2026-06-28 (bugfix)**: **Switched password hashing from argon2 to
+  bcryptjs.** argon2's native module failed to compile in Termux with
+  `gyp: Undefined variable android_ndk_path` — node-gyp attempts Android
+  NDK cross-compilation that Termux doesn't have configured, and this
+  isn't fixable with standard build tools (`pkg install python clang
+  make` doesn't resolve it). `bcrypt` (the native version) has the same
+  problem. `bcryptjs` is a pure-JS reimplementation with no native
+  compilation step, confirmed to install cleanly. Tradeoff: bcrypt is
+  marginally more vulnerable to GPU-based cracking at extreme scale than
+  argon2id, but remains industry-standard and adequate at current scale.
+  Not a permanent lock-in — hashes can be upgraded opportunistically on
+  next login if revisited later.
