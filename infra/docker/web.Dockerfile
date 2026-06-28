@@ -8,7 +8,7 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
 COPY packages/types ./packages/types
 COPY apps/web ./apps/web
 
-RUN pnpm install --frozen-lockfile --filter @axiom/web...
+RUN pnpm install --filter @axiom/web...
 RUN pnpm --filter @axiom/web build
 
 # --- Run stage ---

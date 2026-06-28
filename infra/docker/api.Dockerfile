@@ -8,7 +8,7 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
 COPY packages/types ./packages/types
 COPY services/api ./services/api
 
-RUN pnpm install --frozen-lockfile --filter @axiom/api... 
+RUN pnpm install --filter @axiom/api...
 RUN pnpm --filter @axiom/api build
 
 # --- Run stage ---

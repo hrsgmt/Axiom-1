@@ -39,3 +39,14 @@ itemized here as the prior phase nears completion.
   unaffected by this limitation). Local `pnpm dev` is no longer part of the
   workflow; GitHub Codespaces remains a fallback option for interactive
   debugging if ever needed, but is not required day-to-day.
+- **2026-06-28 (bugfix)**: Render deploy and CI were both failing with
+  "exited with status 1 while building" because `pnpm-lock.yaml` was never
+  committed to the repo — code was authored and packaged without ever
+  running `pnpm install` in that environment, so no lockfile existed to
+  commit. Every build command used `--frozen-lockfile`, which hard-fails
+  with no lockfile present. Fixed by removing `--frozen-lockfile` from
+  render.yaml, ci.yml, and both Dockerfiles, and committing a real
+  `pnpm-lock.yaml` generated from the Codespace (the one environment we've
+  confirmed runs `pnpm install` successfully). Going forward, any new
+  dependency added to a package.json must have the lockfile regenerated
+  and committed in the same change, or this class of failure recurs.

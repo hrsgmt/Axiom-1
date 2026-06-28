@@ -5,7 +5,7 @@ services:
     repo: https://github.com/hrsgmt/Axiom-1
     branch: main
     rootDir: .
-    buildCommand: corepack enable && corepack prepare pnpm@9.1.0 --activate && pnpm install --frozen-lockfile && pnpm build:api
+    buildCommand: corepack enable && corepack prepare pnpm@9.1.0 --activate && pnpm install && pnpm build:api
     startCommand: pnpm start:api
     plan: free
     envVars:
@@ -24,7 +24,7 @@ services:
     repo: https://github.com/hrsgmt/Axiom-1
     branch: main
     rootDir: .
-    buildCommand: corepack enable && corepack prepare pnpm@9.1.0 --activate && pnpm install --frozen-lockfile && pnpm build:web
+    buildCommand: corepack enable && corepack prepare pnpm@9.1.0 --activate && pnpm install && pnpm build:web
     startCommand: pnpm start:web
     plan: free
     envVars:
